@@ -8,25 +8,36 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - name: Install Dependencies
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Buildozer
         run: |
           sudo apt update
-          sudo apt install -y openjdk-17-jdk python3-pip zip unzip libffi-dev libssl-dev
+          sudo apt install -y zip unzip libffi-dev libssl-dev
           pip install --upgrade pip
           pip install buildozer==1.5.0 cython==0.29.36
-      - name: FORCE License
+
+      - name: Pre-Accept Licenses in BOTH SDKs
         run: |
           mkdir -p ~/.android
           touch ~/.android/repositories.cfg
           mkdir -p $ANDROID_HOME/licenses
+          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
           echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $ANDROID_HOME/licenses/android-sdk-license
           echo "d56f5187479451eabf01fb78af6dfcb131a6481e" >> $ANDROID_HOME/licenses/android-sdk-license
           echo "24333f8a63b6825ea9c5514f83c1059b8ea4b324" >> $ANDROID_HOME/licenses/android-sdk-license
+          cp $ANDROID_HOME/licenses/* ~/.buildozer/android/platform/android-sdk/licenses/ 2>/dev/null || true
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;33.0.2" "platform-tools" "platforms;android-33" || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;33.0.2" "build-tools;37.0.0" "platform-tools" "platforms;android-33" || true
+          ls $ANDROID_HOME/build-tools/
+
       - name: Build APK
         run: |
           buildozer android debug
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
