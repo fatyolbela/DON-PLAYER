@@ -4,6 +4,7 @@ package.name = donplayer
 package.domain = org.donplayer
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json
+version = 0.1
 requirements = python3,kivy
 orientation = landscape
 fullscreen = 0
