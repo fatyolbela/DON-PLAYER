@@ -1,25 +1,34 @@
-[app]
-title = DON PLAYER
-package.name = donplayer
-package.domain = org.donplayer
-source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,json
-version = 0.1
-requirements = python3,kivy==2.3.0
-orientation = landscape
-fullscreen = 0
-android.permissions = INTERNET
+name: Build DON PLAYER APK
 
-[buildozer]
-log_level = 2
-warn_on_root = 1
+on: [push]
 
-[app:android]
-android.api = 33
-android.build_tools = 33.0.2
-android.minapi = 21
-android.ndk = 25b
-android.accept_sdk_license_agreements = True
-android.archs = arm64-v8a, armeabi-v7a
-p4a.branch = master
-p4a.bootstrap = sdl2
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip openjdk-17-jdk unzip libffi-dev libssl-dev
+          pip install --upgrade pip
+          pip install buildozer cython==0.29.36
+
+      - name: Build APK
+        run: |
+          mkdir -p $HOME/.buildozer/android/platform/android-sdk/tools/bin
+          mkdir -p $HOME/.buildozer/android/platform/android-sdk/licenses
+          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $HOME/.[STRIPPED 71 bytes]"d56f5187479451eabf01fb78af6dfcb131a6481e" >> $HOME/.[STRIPPED 76 bytes] android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: DON-PLAYER-APK
+          path: bin/*.apk
