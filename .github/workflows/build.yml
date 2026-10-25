@@ -11,16 +11,24 @@ jobs:
         with:
           python-version: '3.10'
       
-      - name: Install System Dependencies
+      - name: Install Dependencies
         run: |
           sudo apt update
-          sudo apt install -y openjdk-17-jdk python3-pip zip unzip libffi-dev libssl-dev libltdl-dev libsqlite3-dev
+          sudo apt install -y openjdk-17-jdk python3-pip zip unzip libffi-dev libssl-dev
           pip install --upgrade pip
           pip install buildozer==1.5.0 cython==0.29.36
 
+      - name: Accept Android Licenses & Install Build Tools
+        run: |
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;37.0.0" "build-tools;33.0.2" "platform-tools" || true
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
       - name: Build APK
         run: |
-          buildozer android debug
+          yes | buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
