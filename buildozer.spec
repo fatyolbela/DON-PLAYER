@@ -16,6 +16,4 @@ android.api = 33
 android.minapi = 21
 android.ndk = 28c
 android.accept_sdk_license_agreements = True
-android.build_tools = 33.0.2
 android.archs = arm64-v8a
-p4a.bootstrap = sdl2
