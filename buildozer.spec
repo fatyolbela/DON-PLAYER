@@ -9,12 +9,12 @@ requirements = python3,kivy
 orientation = landscape
 
 [buildozer]
-log_level = 1
+log_level = 2
 
 [app:android]
 android.api = 33
 android.minapi = 21
-android.ndk = 25b
+android.ndk = 28c
 android.accept_sdk_license_agreements = True
 android.build_tools = 33.0.2
 android.archs = arm64-v8a
