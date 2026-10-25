@@ -17,14 +17,20 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y python3-pip openjdk-17-jdk unzip libffi-dev libssl-dev
+          sudo apt install -y python3-pip openjdk-17-jdk unzip wget libffi-dev libssl-dev
           pip install --upgrade pip
           pip install buildozer cython==0.29.36
 
-      - name: Accept Android Licenses
+      - name: Fix Android SDK
         run: |
-          mkdir -p $HOME/.buildozer/android/platform/android-sdk/licenses
-          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $HOME/.[STRIPPED 71 bytes]"d56f5187479451eabf01fb78af6dfcb131a6481e" >> $HOME/.[STRIPPED 71 bytes]"24333f8a63b6825ea9c5514f83c1051866b9caa" >> $HOME/.[STRIPPED 71 bytes]"y" | $HOME/.[STRIPPED 67 bytes] --licenses || true
+          mkdir -p ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest
+          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
+          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > ~/.[STRIPPED 71 bytes]"d56f5187479451eabf01fb78af6dfcb131a6481e" >> ~/.[STRIPPED 69 bytes] /tmp
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q commandlinetools-linux-11076708_latest.zip
+          cp -r cmdline-tools/* ~/.[STRIPPED 65 bytes] +x ~/.[STRIPPED 74 bytes]
+          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
+          ln -sf ~/.[STRIPPED 74 bytes] ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager || true
 
       - name: Build APK
         run: |
