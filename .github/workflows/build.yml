@@ -1,7 +1,7 @@
 name: Build DON PLAYER APK
 on:
   push:
-    branches: [ main, master, fõ- ]
+    branches: [ main, master ]
   workflow_dispatch:
 jobs:
   build:
@@ -15,9 +15,9 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y openjdk-17-jdk unzip zip python3-pip
+          sudo apt install -y openjdk-17-jdk zip unzip
           pip install --upgrade pip
-          pip install buildozer Cython==0.29.36
+          pip install buildozer Cython==0.29.33
       - name: Build with Buildozer
         run: |
           yes | buildozer android debug
